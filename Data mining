@@ -15,3 +15,5 @@ df = pd.DataFrame(data)
 
 # Export to CSV
 df.to_csv('BTC-2021min.csv', index=False)
+
+print("hello world")
