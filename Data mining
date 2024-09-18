@@ -16,4 +16,157 @@ df = pd.DataFrame(data)
 # Export to CSV
 df.to_csv('BTC-2021min.csv', index=False)
 
-print("hello world")
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the BTC-2021min.csv dataset
+df = pd.read_csv('BTC-2021min.csv')
+
+# 1. What are the column names of the dataset?
+print("Column names:", df.columns)
+
+# 2. What is the structure of the dataset? (data types of each column)
+print("\nDataset structure:")
+print(df.info())
+
+# 3. What is the summary statistics of numerical columns?
+print("\nSummary statistics:")
+print(df.describe())
+
+# 4. How many missing values are in each column?
+print("\nMissing values in each column:")
+print(df.isnull().sum())
+
+# 5. What are the unique values in the 'Date' column?
+print("\nUnique values in 'Date' column:")
+print(df['Date'].unique())
+
+# 6. How many records are there in the dataset?
+print("\nNumber of records:", len(df))
+
+# 7. What are the first 5 rows of the dataset?
+print("\nFirst 5 rows:")
+print(df.head())
+
+# 8. What are the last 5 rows of the dataset?
+print("\nLast 5 rows:")
+print(df.tail())
+
+# 9. What is the range of the 'Open' prices in the dataset?
+open_min = df['Open'].min()
+open_max = df['Open'].max()
+print("\nRange of 'Open' prices:", open_min, open_max)
+
+# 10. What is the average 'Close' price?
+print("\nAverage 'Close' price:", df['Close'].mean())
+
+# 11. What is the median 'High' price?
+print("\nMedian 'High' price:", df['High'].median())
+
+# 12. What is the variance of the 'Low' prices?
+print("\nVariance of 'Low' prices:", df['Low'].var())
+
+# 13. What is the standard deviation of the 'Volume' column?
+print("\nStandard deviation of 'Volume':", df['Volume'].std())
+
+# 14. What is the total sum of the 'Volume' column?
+print("\nTotal 'Volume':", df['Volume'].sum())
+
+# 15. How many unique dates are there in the dataset?
+print("\nNumber of unique dates:", df['Date'].nunique())
+
+# 16. How many days had a 'Close' price greater than $50,000?
+print("\nDays with 'Close' price > $50,000:", len(df[df['Close'] > 50000]))
+
+# 17. What is the date with the highest 'Close' price?
+print("\nDate with highest 'Close' price:", df[df['Close'] == df['Close'].max()]['Date'].values)
+
+# 18. What is the date with the lowest 'Close' price?
+print("\nDate with lowest 'Close' price:", df[df['Close'] == df['Close'].min()]['Date'].values)
+
+# 19. What is the correlation between 'Open' and 'Close' prices?
+print("\nCorrelation between 'Open' and 'Close' prices:", df['Open'].corr(df['Close']))
+
+# 20. What is the correlation between 'High' and 'Low' prices?
+print("\nCorrelation between 'High' and 'Low' prices:", df['High'].corr(df['Low']))
+
+# 21. What is the correlation between 'Volume' and 'Close' price?
+print("\nCorrelation between 'Volume' and 'Close' price:", df['Volume'].corr(df['Close']))
+
+# 22. What is the skewness of the 'Volume' column?
+print("\nSkewness of 'Volume':", df['Volume'].skew())
+
+# 23. What is the kurtosis of the 'Volume' column?
+print("\nKurtosis of 'Volume':", df['Volume'].kurtosis())
+
+# 24. What is the difference between 'High' and 'Low' prices for each record?
+df['High_Low_Diff'] = df['High'] - df['Low']
+print("\nFirst 5 'High' - 'Low' differences:")
+print(df[['High', 'Low', 'High_Low_Diff']].head())
+
+# 25. What is the average daily price range (High - Low)?
+print("\nAverage daily price range:", df['High_Low_Diff'].mean())
+
+# 26. How many records have a 'Close' price higher than 'Open' price?
+print("\nRecords with 'Close' price higher than 'Open':", len(df[df['Close'] > df['Open']]))
+
+# 27. How many records have a 'Close' price lower than 'Open' price?
+print("\nRecords with 'Close' price lower than 'Open':", len(df[df['Close'] < df['Open']]))
+
+# 28. What is the average percentage change between 'Open' and 'Close' prices?
+df['Percentage_Change'] = (df['Close'] - df['Open']) / df['Open'] * 100
+print("\nAverage percentage change between 'Open' and 'Close':", df['Percentage_Change'].mean())
+
+# 29. What is the maximum percentage change in a day?
+print("\nMaximum percentage change in a day:", df['Percentage_Change'].max())
+
+# 30. What is the minimum percentage change in a day?
+print("\nMinimum percentage change in a day:", df['Percentage_Change'].min())
+
+# Plot 1: Plot the 'Open' prices over time
+plt.figure(figsize=(10, 5))
+plt.plot(df['Date'], df['Open'], label='Open Price', color='blue')
+plt.title('Open Prices Over Time')
+plt.xlabel('Date')
+plt.ylabel('Open Price')
+plt.xticks(rotation=45)
+plt.legend()
+plt.show()
+
+# Plot 2: Plot the 'Close' prices over time
+plt.figure(figsize=(10, 5))
+plt.plot(df['Date'], df['Close'], label='Close Price', color='green')
+plt.title('Close Prices Over Time')
+plt.xlabel('Date')
+plt.ylabel('Close Price')
+plt.xticks(rotation=45)
+plt.legend()
+plt.show()
+
+# Plot 3: Plot the volume of trades over time
+plt.figure(figsize=(10, 5))
+plt.plot(df['Date'], df['Volume'], label='Volume', color='purple')
+plt.title('Volume Over Time')
+plt.xlabel('Date')
+plt.ylabel('Volume')
+plt.xticks(rotation=45)
+plt.legend()
+plt.show()
+
+# Plot 4: Plot the daily 'High' - 'Low' difference
+plt.figure(figsize=(10, 5))
+plt.plot(df['Date'], df['High_Low_Diff'], label='High-Low Difference', color='red')
+plt.title('Daily High-Low Price Difference Over Time')
+plt.xlabel('Date')
+plt.ylabel('Price Difference')
+plt.xticks(rotation=45)
+plt.legend()
+plt.show()
+
+# Plot 5: Histogram of the 'Percentage_Change' between 'Open' and 'Close' prices
+plt.figure(figsize=(8, 5))
+plt.hist(df['Percentage_Change'], bins=30, color='orange', edgecolor='black')
+plt.title('Distribution of Percentage Change (Open to Close)')
+plt.xlabel('Percentage Change')
+plt.ylabel('Frequency')
+plt.show()
