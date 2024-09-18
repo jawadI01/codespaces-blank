@@ -1,0 +1,17 @@
+import pandas as pd
+
+# Sample data representing BTC-2021min
+data = {
+    'Date': ['2021-01-01', '2021-01-02', '2021-01-03'],
+    'Open': [29000, 29300, 30000],
+    'High': [29500, 29800, 30500],
+    'Low': [28500, 29000, 29500],
+    'Close': [29200, 29700, 30300],
+    'Volume': [5000, 6000, 4500]
+}
+
+# Convert data to DataFrame
+df = pd.DataFrame(data)
+
+# Export to CSV
+df.to_csv('BTC-2021min.csv', index=False)
