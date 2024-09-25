@@ -134,25 +134,20 @@ class CustomKMeans:
     def fit(self, df):
         X = df.values
         
-        # Initialize centroids randomly
         np.random.seed(42)
         self.centroids = X[np.random.choice(X.shape[0], size=self.k, replace=False)]
         
-        # Perform KMeans clustering
         for _ in range(100):  # max_iter = 100
-            # Assign labels based on closest centroid
-            self.labels = np.argmin(np.linalg.norm(X[:, None] - self.centroids, axis=2), axis=1)
+
+        self.labels = np.argmin(np.linalg.norm(X[:, None] - self.centroids, axis=2), axis=1)
             
-            # Update centroids based on mean of points in each cluster
             new_centroids = np.array([X[self.labels == i].mean(axis=0) for i in range(self.k)])
             
-            # Check for convergence
             if np.allclose(self.centroids, new_centroids):
                 break
             
             self.centroids = new_centroids
         
-        # Calculate SSE
         self.sse_value = np.sum((X - self.centroids[self.labels]) ** 2)
     
     def predict(self, df):
@@ -162,29 +157,24 @@ class CustomKMeans:
     def sse(self):
         return self.sse_value
 
-# Select columns for clustering
 columns_to_cluster = ['Open', 'Close', 'High', 'Low', 'Volume']
 data = df[columns_to_cluster].dropna()
 
-# Run custom KMeans for different k values and compare with sklearn KMeans
 k_values = [2, 3, 4, 5]
 results_custom = {}
 results_sklearn = {}
 
 for k in k_values:
-    # Custom KMeans
     model_custom = CustomKMeans(k=k)
     model_custom.fit(data)
     sse_custom = model_custom.sse()
     results_custom[k] = sse_custom
     
-    # Sklearn KMeans
     model_sklearn = KMeans(n_clusters=k, random_state=42)
     model_sklearn.fit(data)
     sse_sklearn = mean_squared_error(data, model_sklearn.cluster_centers_[model_sklearn.labels_]) ** 0.5
     results_sklearn[k] = sse_sklearn
 
-# Print results
 print("\nCustom KMeans SSE:")
 for k, sse_value in results_custom.items():
     print(f"k = {k}: SSE = {sse_value:.2f}")
@@ -193,11 +183,9 @@ print("\nSklearn KMeans SSE:")
 for k, sse_value in results_sklearn.items():
     print(f"k = {k}: SSE = {sse_value:.2f}")
 
-# Determine the best k value based on SSE
 best_k = min(results_custom, key=results_custom.get)
 print(f"\nBest k value according to Custom KMeans: {best_k}")
 
-# Additional analysis on the clusters found
 cluster_labels = model_custom.predict(data)
 df['cluster'] = cluster_labels
 cluster_means = df.groupby('cluster').mean()
